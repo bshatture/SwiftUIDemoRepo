@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RegisterView: View {
     @StateObject var registerViewModel = RegisterViewModel()
+    @State var isNavigated: Bool = false
     
     var body: some View {
         VStack(alignment: .center){
@@ -28,8 +29,12 @@ struct RegisterView: View {
                 .textFieldStyle(.roundedBorder)
     
             Button("Register", action: {
-                registerViewModel.registerUser()
+//                registerViewModel.registerUser()
+                self.isNavigated = true
             })
+            .sheet(isPresented: $isNavigated) {
+                        MenuListView()
+                    }
             .padding()
             .foregroundColor(.white)
             .background(.red)
