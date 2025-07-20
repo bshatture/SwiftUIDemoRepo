@@ -12,33 +12,53 @@ struct RegisterView: View {
     @State var isNavigated: Bool = false
     
     var body: some View {
-        VStack(alignment: .center){
-            TextField("Enter first name", text: $registerViewModel.fName)
-                .textFieldStyle(.roundedBorder)
-            
-            TextField("Enter last name", text: $registerViewModel.lName)
-                .textFieldStyle(.roundedBorder)
-            
-            TextField("Enter email id", text: $registerViewModel.emailId)
-                .textFieldStyle(.roundedBorder)
-            
-            TextField("Enter user name", text: $registerViewModel.userName)
-                .textFieldStyle(.roundedBorder)
-            
-            TextField("Enter Password", text: $registerViewModel.password)
-                .textFieldStyle(.roundedBorder)
-    
-            Button("Register", action: {
-//                registerViewModel.registerUser()
-                self.isNavigated = true
-            })
-            .sheet(isPresented: $isNavigated) {
-                        MenuListView()
+        NavigationView{
+            VStack(alignment: .center){
+                TextField("Enter first name", text: $registerViewModel.fName)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.leading, 16)
+                    .padding(.trailing, 16)
+                
+                TextField("Enter last name", text: $registerViewModel.lName)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.leading, 16)
+                    .padding(.trailing, 16)
+                
+                TextField("Enter email id", text: $registerViewModel.emailId)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.leading, 16)
+                    .padding(.trailing, 16)
+                
+                TextField("Enter user name", text: $registerViewModel.userName)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.leading, 16)
+                    .padding(.trailing, 16)
+                
+                TextField("Enter Password", text: $registerViewModel.password)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.leading, 16)
+                    .padding(.trailing, 16)
+
+                NavigationLink(destination: DashboardView(), isActive: $isNavigated){
+                    Button("Register"){
+                        //                registerViewModel.registerUser()
+                        self.isNavigated = true
                     }
-            .padding()
-            .foregroundColor(.white)
-            .background(.red)
-            .cornerRadius(10)
+                    
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(.red)
+                    .cornerRadius(10)
+                }
+//                .navigationTitle("Register")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal){
+                        Text("Register")
+                            .font(.system(size: 40, weight: .bold))
+                    }
+                }
+            }
         }
     }
 }

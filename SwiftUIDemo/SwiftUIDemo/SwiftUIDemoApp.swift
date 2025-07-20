@@ -13,6 +13,7 @@ struct SwiftUIDemoApp: App {
 
     var body: some Scene {
         WindowGroup {
+            RegisterView()
 //            ContentView()
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
