@@ -13,8 +13,10 @@ struct SwiftUIDemoApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            LoginView( isLoggedIn: .constant(false), userData: .constant(UserDetailsModel(name: "", email: "")), onLogin: {
+                
+            })//            ContentView()
+//                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }
