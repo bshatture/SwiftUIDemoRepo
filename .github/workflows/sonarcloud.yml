@@ -1,0 +1,34 @@
+name: SonarCloud Analysis (Swift)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  sonarcloud:
+    name: Build and Analyze
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Optional: Build your Swift project (recommended)
+      - name: Build Swift project
+        run: |
+          xcodebuild \
+            -scheme SwiftUIDemo \
+            -destination 'platform=iOS Simulator,name=iPhone 16 Pro Max' \
+            clean build
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          organization: ${{ secrets.SONAR_ORGANIZATION }}
+          projectKey: ${{ secrets.SONAR_PROJECT_KEY }}
