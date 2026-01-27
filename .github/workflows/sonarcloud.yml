@@ -17,13 +17,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Build the Swift / SwiftUI project
+      # Build the Swift / SwiftUI project (CI-safe)
       - name: Build Swift project
         working-directory: SwiftUIDemo
         run: |
           xcodebuild \
             -scheme SwiftUIDemo \
-            -destination 'platform=iOS Simulator,name=iPhone 16 Pro Max' \
+            -destination 'platform=iOS Simulator,OS=latest' \
             -derivedDataPath build \
             clean build
 
