@@ -17,14 +17,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Optional: Build your Swift project (recommended)
+      # Build the Swift / SwiftUI project
       - name: Build Swift project
+        working-directory: SwiftUIDemo
         run: |
           xcodebuild \
             -scheme SwiftUIDemo \
             -destination 'platform=iOS Simulator,name=iPhone 16 Pro Max' \
+            -derivedDataPath build \
             clean build
 
+      # SonarCloud analysis
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
