@@ -39,13 +39,9 @@ jobs:
       - name: Run Tests & Generate Coverage
         working-directory: SwiftUIDemo
         run: |
-          # Define a concrete simulator for tests
-          SIMULATOR_NAME="iPhone 14"
-          SIMULATOR_OS="17.2"
-
           xcodebuild \
             -scheme SwiftUIDemo \
-            -destination "platform=iOS Simulator,name=$SIMULATOR_NAME,OS=$SIMULATOR_OS" \
+            -destination 'platform=iOS Simulator' \
             -derivedDataPath build \
             test \
             -enableCodeCoverage YES
@@ -56,7 +52,6 @@ jobs:
       - name: Generate coverage.xml for SonarCloud
         working-directory: SwiftUIDemo
         run: |
-          # Path to the Xcode coverage data
           XCRESULT_PATH="build/Logs/Test/Test.xcresult"
 
           # Convert to JSON (optional) and XML for SonarCloud
@@ -87,10 +82,6 @@ jobs:
             -Dsonar.swift.coverage.reportPaths=SwiftUIDemo/build/coverage.xml
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-
-
-
 
 
 
