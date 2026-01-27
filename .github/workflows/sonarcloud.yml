@@ -2,13 +2,11 @@ name: SonarCloud Analysis (Swift)
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   pull_request:
 
 jobs:
   sonarcloud:
-    name: Build and Analyze
     runs-on: macos-latest
 
     steps:
@@ -17,17 +15,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Build the Swift / SwiftUI project (CI-safe)
       - name: Build Swift project
         working-directory: SwiftUIDemo
         run: |
           xcodebuild \
             -scheme SwiftUIDemo \
-            -destination 'platform=iOS Simulator,OS=latest' \
+            -destination 'generic/platform=iOS Simulator' \
             -derivedDataPath build \
             clean build
 
-      # SonarCloud analysis
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
@@ -35,3 +31,4 @@ jobs:
         with:
           organization: ${{ secrets.SONAR_ORGANIZATION }}
           projectKey: ${{ secrets.SONAR_PROJECT_KEY }}
+
