@@ -29,7 +29,7 @@ jobs:
         run: |
           xcodebuild \
             -scheme SwiftUIDemo \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.2' \
             -derivedDataPath build \
             clean build
 
@@ -41,13 +41,32 @@ jobs:
         run: |
           xcodebuild \
             -scheme SwiftUIDemo \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.2' \
             -derivedDataPath build \
             test \
             -enableCodeCoverage YES
 
       # -----------------------------
-      # 4️⃣ Setup Java (required by SonarScanner)
+      # 4️⃣ Convert Xcode coverage to XML for SonarCloud
+      # -----------------------------
+      - name: Generate coverage.xml for SonarCloud
+        working-directory: SwiftUIDemo
+        run: |
+          # Install xcresulttool if missing
+          if ! command -v xccov &> /dev/null; then
+            echo "xccov not found, exiting"
+            exit 1
+          fi
+
+          # Path to the Xcode coverage data
+          XCRESULT_PATH="build/Logs/Test/Test.xcresult"
+
+          # Convert to cobertura XML (SonarCloud format)
+          xcrun xccov view --report --json "$XCRESULT_PATH" > build/coverage.json
+          xcrun xccov view --report --xml "$XCRESULT_PATH" > build/coverage.xml
+
+      # -----------------------------
+      # 5️⃣ Setup Java (required by SonarScanner)
       # -----------------------------
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -56,7 +75,7 @@ jobs:
           java-version: '17'
 
       # -----------------------------
-      # 5️⃣ Run SonarCloud Scan
+      # 6️⃣ Run SonarCloud Scan
       # -----------------------------
       - name: Run SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v2
@@ -67,9 +86,10 @@ jobs:
           extraArgs: >
             -Dsonar.sources=.
             -Dsonar.language=swift
-            -Dsonar.swift.coverage.reportPaths=SwiftUIDemo/build/codecoverage/coverage.xml
+            -Dsonar.swift.coverage.reportPaths=SwiftUIDemo/build/coverage.xml
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
 
 
