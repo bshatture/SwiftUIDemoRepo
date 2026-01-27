@@ -42,13 +42,24 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Java (required for SonarScanner)
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '17'
+
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
+        uses: SonarSource/sonarcloud-github-action@e4c8d9f1b2a3c4d5e6f7g8h9i0j1k2l3m4n5o6p7
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           organization: ${{ secrets.SONAR_ORGANIZATION }}
           projectKey: ${{ secrets.SONAR_PROJECT_KEY }}
-          projectBaseDir: .
+          projectBaseDir: SwiftUIDemo
+          extraArgs: >
+            -Dsonar.sources=.
+            -Dsonar.language=swift
+            -Dsonar.swift.coverage.reportPaths=SwiftUIDemo/build/codecoverage/coverage.xml
+
 
 
