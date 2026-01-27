@@ -50,16 +50,17 @@ jobs:
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v2
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          organization: ${{ secrets.SONAR_ORGANIZATION }}
-          projectKey: ${{ secrets.SONAR_PROJECT_KEY }}
+          organization: ${{ secrets.SONAR_ORGANIZATION }}   # <-- must be 'with', not env
+          projectKey: ${{ secrets.SONAR_PROJECT_KEY }}      # <-- must be 'with', not env
           projectBaseDir: SwiftUIDemo
           extraArgs: >
             -Dsonar.sources=.
             -Dsonar.language=swift
             -Dsonar.swift.coverage.reportPaths=SwiftUIDemo/build/codecoverage/coverage.xml
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}          # required token
+
 
 
 
