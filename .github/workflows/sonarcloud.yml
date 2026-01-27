@@ -2,15 +2,16 @@ name: SonarCloud Analysis (Swift)
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, main, 'feature/**' ]
   pull_request:
+    branches: [ master, main ]
 
 jobs:
   # ------------------------------------------------------------
-  # 1️⃣ Build job (macOS — required for Xcode)
+  # 1️⃣ Build and Test Job (macOS)
   # ------------------------------------------------------------
-  build:
-    name: Build iOS App
+  build-and-test:
+    name: Build & Test iOS App
     runs-on: macos-latest
 
     steps:
@@ -28,13 +29,29 @@ jobs:
             -derivedDataPath build \
             clean build
 
+      - name: Run Tests & Generate Coverage
+        working-directory: SwiftUIDemo
+        run: |
+          xcodebuild \
+            -scheme SwiftUIDemo \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build \
+            test \
+            -enableCodeCoverage YES
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: SwiftUIDemo/build/codecoverage/coverage.xml
+
   # ------------------------------------------------------------
-  # 2️⃣ SonarCloud job (Linux — required for container action)
+  # 2️⃣ SonarCloud Scan Job (macOS)
   # ------------------------------------------------------------
   sonarcloud:
-    name: SonarCloud Analysis
-    runs-on: ubuntu-latest
-    needs: build
+    name: SonarCloud Scan
+    runs-on: macos-latest
+    needs: build-and-test
 
     steps:
       - name: Checkout code
@@ -42,24 +59,31 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Java (required for SonarScanner)
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: SwiftUIDemo/build/codecoverage/
+
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: SonarCloud Scan
+      - name: Run SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v2
         with:
-          organization: ${{ secrets.SONAR_ORGANIZATION }}   # <-- must be 'with', not env
-          projectKey: ${{ secrets.SONAR_PROJECT_KEY }}      # <-- must be 'with', not env
+          organization: ${{ secrets.SONAR_ORGANIZATION }}
+          projectKey: ${{ secrets.SONAR_PROJECT_KEY }}
           projectBaseDir: SwiftUIDemo
           extraArgs: >
             -Dsonar.sources=.
             -Dsonar.language=swift
             -Dsonar.swift.coverage.reportPaths=SwiftUIDemo/build/codecoverage/coverage.xml
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}          # required token
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
 
 
