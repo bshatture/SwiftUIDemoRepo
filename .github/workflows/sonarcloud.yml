@@ -39,9 +39,13 @@ jobs:
       - name: Run Tests & Generate Coverage
         working-directory: SwiftUIDemo
         run: |
+          # Define a concrete simulator for tests
+          SIMULATOR_NAME="iPhone 14"
+          SIMULATOR_OS="17.2"
+
           xcodebuild \
             -scheme SwiftUIDemo \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination "platform=iOS Simulator,name=$SIMULATOR_NAME,OS=$SIMULATOR_OS" \
             -derivedDataPath build \
             test \
             -enableCodeCoverage YES
@@ -52,16 +56,10 @@ jobs:
       - name: Generate coverage.xml for SonarCloud
         working-directory: SwiftUIDemo
         run: |
-          # Ensure xccov exists
-          if ! command -v xccov &> /dev/null; then
-            echo "xccov not found, exiting"
-            exit 1
-          fi
-
-          # Path to Xcode coverage data
+          # Path to the Xcode coverage data
           XCRESULT_PATH="build/Logs/Test/Test.xcresult"
 
-          # Convert to cobertura XML for SonarCloud
+          # Convert to JSON (optional) and XML for SonarCloud
           xcrun xccov view --report --json "$XCRESULT_PATH" > build/coverage.json
           xcrun xccov view --report --xml "$XCRESULT_PATH" > build/coverage.xml
 
@@ -89,6 +87,7 @@ jobs:
             -Dsonar.swift.coverage.reportPaths=SwiftUIDemo/build/coverage.xml
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
 
 
