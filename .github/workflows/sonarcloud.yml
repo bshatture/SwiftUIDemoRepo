@@ -49,7 +49,7 @@ jobs:
           java-version: '17'
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@e4c8d9f1b2a3c4d5e6f7g8h9i0j1k2l3m4n5o6p7
+        uses: sonarsource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
