@@ -12,7 +12,6 @@ jobs:
     runs-on: macos-latest
 
     steps:
-
       # -----------------------------
       # 1️⃣ Checkout code
       # -----------------------------
@@ -34,7 +33,7 @@ jobs:
             clean build
 
       # -----------------------------
-      # 3️⃣ Run tests & generate coverage 
+      # 3️⃣ Run unit tests & generate coverage
       # -----------------------------
       - name: Run Tests & Generate Coverage
         working-directory: SwiftUIDemo
@@ -49,16 +48,23 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             ENABLE_CODE_COVERAGE=YES
 
-
       # -----------------------------
       # 4️⃣ Convert Xcode coverage to XML for SonarCloud
       # -----------------------------
       - name: Generate coverage.xml for SonarCloud
         working-directory: SwiftUIDemo
         run: |
-          XCRESULT_PATH="build/Logs/Test/Test.xcresult"
+          # Find the generated xcresult bundle dynamically
+          XCRESULT_PATH=$(find build/Logs/Test -name "*.xcresult" | head -n 1)
 
-          # Convert to JSON (optional) and XML for SonarCloud
+          if [ -z "$XCRESULT_PATH" ]; then
+            echo "❌ No .xcresult bundle found"
+            exit 1
+          fi
+
+          echo "✅ Using xcresult: $XCRESULT_PATH"
+
+          # Generate coverage reports
           xcrun xccov view --report --json "$XCRESULT_PATH" > build/coverage.json
           xcrun xccov view --report --xml "$XCRESULT_PATH" > build/coverage.xml
 
@@ -83,9 +89,10 @@ jobs:
           extraArgs: >
             -Dsonar.sources=.
             -Dsonar.language=swift
-            -Dsonar.swift.coverage.reportPaths=SwiftUIDemo/build/coverage.xml
+            -Dsonar.swift.coverage.reportPaths=build/coverage.xml
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
 
 
