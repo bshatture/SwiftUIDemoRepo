@@ -1,4 +1,4 @@
-name: SonarCloud Analysis (Swift)
+name: SonarCloud Analysis (Swift) 
 
 on:
   push:
