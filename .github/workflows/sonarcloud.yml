@@ -66,28 +66,21 @@ jobs:
           xcrun xccov view --report --json "$XCRESULT_PATH" > build/coverage.json
 
       # -----------------------------
-      # 5️⃣ Setup Java (required by SonarScanner)
-      # -----------------------------
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: temurin
-          java-version: '17'
-
-      # -----------------------------
-      # 6️⃣ Run SonarCloud Scan (static analysis only)
+      # 5️⃣ Run SonarCloud Scan (CLI – macOS compatible)
       # -----------------------------
       - name: Run SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@v2
-        with:
-          organization: ${{ secrets.SONAR_ORGANIZATION }}
-          projectKey: ${{ secrets.SONAR_PROJECT_KEY }}
-          projectBaseDir: SwiftUIDemo
-          extraArgs: >
-            -Dsonar.sources=.
-            -Dsonar.language=swift
+        working-directory: SwiftUIDemo
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          brew install sonar-scanner
+
+          sonar-scanner \
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=$SONAR_TOKEN
 
 
 
