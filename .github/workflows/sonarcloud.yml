@@ -66,7 +66,7 @@ jobs:
           xcrun xccov view --report --json "$XCRESULT_PATH" > build/coverage.json
 
       # -----------------------------
-      # 5️⃣ Run SonarCloud Scan (CLI – macOS compatible)
+      # 5️⃣ Run SonarCloud Scan (CLI – macOS compatible) 
       # -----------------------------
       - name: Run SonarCloud Scan
         working-directory: SwiftUIDemo
