@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
+    @Environment(Router.self) var router
 
     @Binding var isLoggedIn: Bool
     @Binding var userData: UserDetailsModel
@@ -57,9 +58,10 @@ struct LoginView: View {
                     switch success {
                         case true:
                         print("Login successful")
-                        userData.name = loginVM.userNameText
-                        self.isLoggedIn = true
-                        onLogin()
+                        router.push(.dashboardView)
+//                        userData.name = loginVM.userNameText
+//                        self.isLoggedIn = true
+//                        onLogin()
                     case false:
                         print("Login failed")
                     }
@@ -90,3 +92,10 @@ struct LoginView: View {
 //#Preview {
 //    LoginView( isLoggedIn: .constant(false), userData: .constant(UserDetailsModel(name: "", email: "")))
 //}
+
+#Preview {
+    @State var isLoggedIn = false
+    @State var userData = UserDetailsModel(name: "", email: "")
+    return LoginView(isLoggedIn: $isLoggedIn, userData: $userData, onLogin: {})
+}
+

@@ -15,7 +15,10 @@ struct SwiftUIDemoApp: App {
         WindowGroup {
             LoginView( isLoggedIn: .constant(false), userData: .constant(UserDetailsModel(name: "", email: "")), onLogin: {
                 
-            })//            ContentView()
+            })
+            .router()
+            
+            //            ContentView()
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
