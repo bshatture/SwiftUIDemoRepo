@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct SwiftUIDemoApp: App {
+    @State private var themeVM = ThemeViewModel()
     let persistenceController = PersistenceController.shared
 
     var body: some Scene {
@@ -17,6 +18,8 @@ struct SwiftUIDemoApp: App {
                 
             })
             .router()
+            .environment(\.CustomThemeByBH, themeVM.currentTheme)
+            .environment(themeVM)
             
             //            ContentView()
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
