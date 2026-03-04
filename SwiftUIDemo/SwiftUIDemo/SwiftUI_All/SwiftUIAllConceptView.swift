@@ -18,6 +18,10 @@ struct SwiftUIAllConceptView: View {
         
         Text("Custom Font")
             .font(Font.custom("AutumnRegular", size: 20, relativeTo: .headline))
+        Button("Custom Buttom") {
+            
+        }
+        .buttonStyle(PrimaryButtonStyle())
 
     }
 }
