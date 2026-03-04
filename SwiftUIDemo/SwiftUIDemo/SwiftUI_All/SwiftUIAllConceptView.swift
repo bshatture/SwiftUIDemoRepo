@@ -13,7 +13,11 @@ struct SwiftUIAllConceptView: View {
     
     var body: some View {
         VStack{
-            Text("SwiftUI cutom text")
+            
+            CardView()
+                .cardStyle()
+            
+            Text("SwiftUI custom text")
                 .foregroundColor(theme.textColor)
                 .font(theme.font)
             
