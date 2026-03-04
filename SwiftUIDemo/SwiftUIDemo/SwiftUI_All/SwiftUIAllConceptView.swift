@@ -12,17 +12,23 @@ struct SwiftUIAllConceptView: View {
     @Environment(\.CustomThemeByBH) var theme
     
     var body: some View {
-        Text("SwiftUI cutom text")
-            .foregroundColor(theme.textColor)
-            .font(theme.font)
-        
-        Text("Custom Font")
-            .font(Font.custom("AutumnRegular", size: 20, relativeTo: .headline))
-        Button("Custom Buttom") {
+        VStack{
+            Text("SwiftUI cutom text")
+                .foregroundColor(theme.textColor)
+                .font(theme.font)
+            
+            Text("Custom Font")
+                .font(Font.custom("AutumnRegular", size: 20, relativeTo: .headline))
+            TextField("Custom TextField", text: .constant(""))
+                .customProperties()
+            
+            Button("Custom Buttom") {
+                
+            }
+            .buttonStyle(PrimaryButtonStyle())
             
         }
-        .buttonStyle(PrimaryButtonStyle())
-
+        .padding()
     }
 }
 
