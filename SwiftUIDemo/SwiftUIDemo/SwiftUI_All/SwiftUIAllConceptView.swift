@@ -8,7 +8,14 @@
 import SwiftUI
 
 struct SwiftUIAllConceptView: View {
+    
+    @Environment(\.CustomThemeByBH) var theme
+    
     var body: some View {
+        Text("SwiftUI cutom text")
+            .foregroundColor(theme.textColor)
+            .font(theme.font)
+        
         Text("Custom Font")
             .font(Font.custom("AutumnRegular", size: 20, relativeTo: .headline))
 
