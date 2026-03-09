@@ -11,7 +11,7 @@ struct CardStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding()
-            .frame(maxHeight: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .frame(height: UIScreen.main.bounds.height * 0.25)
             .background(
                 Image("cardbackground")
