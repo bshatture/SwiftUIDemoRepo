@@ -30,6 +30,8 @@ jobs:
             -scheme SwiftUIDemo \
             -destination 'generic/platform=iOS Simulator' \
             -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
             clean build
 
       # -----------------------------
@@ -101,7 +103,7 @@ jobs:
             -Dsonar.sources=. \
             -Dsonar.swift.coverage.reportPaths=build/coverage.json \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=$SONAR_TOKEN \
+            -Dsonar.token=$SONAR_TOKEN \
             -Dsonar.c.file.suffixes=- \
             -Dsonar.cpp.file.suffixes=- \
             -Dsonar.objc.file.suffixes=-
