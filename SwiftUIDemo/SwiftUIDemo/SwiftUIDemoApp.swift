@@ -20,7 +20,7 @@ struct SwiftUIDemoApp: App {
             .router()
             .environment(\.CustomThemeByBH, themeVM.currentTheme)
             .environment(themeVM)
-            
+            .environment(UserPreferences())
             //            ContentView()
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
